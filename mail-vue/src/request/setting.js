@@ -1,15 +1,16 @@
 import http from '@/axios/index.js';
+import {withBrandDefaults} from '@/utils/branding.js';
 
 export function settingSet(setting) {
     return http.put('/setting/set', setting)
 }
 
 export function settingQuery() {
-    return http.get('/setting/query')
+    return http.get('/setting/query').then(withBrandDefaults)
 }
 
 export function websiteConfig() {
-    return http.get('/setting/websiteConfig')
+    return http.get('/setting/websiteConfig').then(withBrandDefaults)
 }
 
 export function setBackground(background) {

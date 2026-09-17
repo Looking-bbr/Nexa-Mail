@@ -1,158 +1,58 @@
+# Nexa Mail
+
 <p align="center">
-    <img src="doc/demo/logo.png" width="80px" />
-    <h1 align="center">Cloud Mail</h1>
-    <p align="center">基于 Cloudflare 的简约响应式邮箱服务，支持邮件发送、附件收发 🎉</p> 
-    <p align="center">
-        简体中文 | <a href="/README-en.md" style="margin-left: 5px">English </a>
-    </p>
-    <p align="center">
-        <a href="https://github.com/maillab/cloud-mail/tree/main?tab=MIT-1-ov-file" target="_blank" >
-            <img src="https://img.shields.io/badge/license-MIT-green" />
-        </a>    
-        <a href="https://github.com/maillab/cloud-mail/releases" target="_blank" >
-            <img src="https://img.shields.io/github/v/release/maillab/cloud-mail" alt="releases" />
-        </a>  
-        <a href="https://github.com/maillab/cloud-mail/issues" >
-            <img src="https://img.shields.io/github/issues/maillab/cloud-mail" alt="issues" />
-        </a>  
-        <a href="https://github.com/maillab/cloud-mail/stargazers" target="_blank">
-            <img src="https://img.shields.io/github/stars/maillab/cloud-mail" alt="stargazers" />
-        </a>  
-        <a href="https://github.com/maillab/cloud-mail/forks" target="_blank" >
-            <img src="https://img.shields.io/github/forks/maillab/cloud-mail" alt="forks" />
-        </a>
-    </p>
-    <p align="center">
-        <a href="https://trendshift.io/repositories/20459" target="_blank" >
-            <img src="https://trendshift.io/api/badge/repositories/20459" alt="trendshift" >
-        </a>
-    </p>
+  <img src="mail-vue/public/mail-pwa-512.png" width="80" height="80" alt="Nexa Mail">
 </p>
 
+简体中文 | [English](README-en.md)
 
-## 项目简介
+Nexa Mail 是面向自用部署的邮件服务，基于 MIT 开源项目 Cloud Mail 进行品牌定制与二次开发，并非从零原创的底层实现。服务使用 Nexa Mail 品牌，保留上游许可证与版权声明。
 
-只需要一个域名，就可以创建多个不同的邮箱，类似各大邮箱平台，本项目支持署到 Cloudflare Workers ，降低服务器成本，搭建自己的邮箱服务
+本仓库用于维护部署代码。计划对外提供的是部署后的邮件服务；本说明不会改变仓库的实际可见性，也不会部署或删除任何资源。
 
-## 项目展示
+## 项目组成
 
-- [在线演示](https://skymail.ink)<br>
-- [部署文档](https://doc.skymail.ink)<br>
+- `mail-vue/`：Vue 3 / Element Plus 前端、登录页、管理界面和 PWA。
+- `mail-worker/`：Cloudflare Workers 后端，使用 D1、KV、R2，支持邮件收发、Resend、Telegram 通知、OAuth 等现有能力。
+- `.github/workflows/deploy-cloudflare.yml`：现有构建与部署流程。
+- `LICENSE`：保留的 MIT 许可证及原版权声明。
 
-| ![](/doc/demo/demo1.png) | ![](/doc/demo/demo2.png) |
-|-----------------------|-----------------------|
-| ![](/doc/demo/demo3.png) | ![](/doc/demo/demo4.png) |
+## 第一阶段品牌定制
 
+- 产品标题、页面描述、新安装的默认标题与公告标题使用 Nexa Mail。
+- favicon、PWA（192 / 512 像素）、加载画面、登录页及侧栏使用维护者提供的蓝色 N 邮箱 Logo；仅按尺寸导出，不改变图案。
+- 删除登录页和系统设置里的上游宣传链接、捐赠入口及自动查询上游版本的请求。GitHub OAuth 和 Telegram 通知功能保留。
+- 不改变邮件业务逻辑、API 路径、数据库结构、Cloudflare bindings 或 OAuth 流程。
 
+## 已部署实例的兼容处理
 
+新建数据库使用新的默认品牌值。已有数据库不会自动迁移或覆盖标题：前端读取设置时，仅把完全等于旧默认值 `Cloud Mail` 的 `title` 和 `noticeTitle` 显示为 `Nexa Mail`。自定义标题、公告正文和其他配置保持原样；不会在读取时写回 D1 或 KV。
 
-## 功能介绍
+如管理员曾在自定义标题、公告正文或背景图片中加入上游名称或链接，请在系统设置里人工确认并调整。这些用户配置不会被批量改写。已有 PWA / 浏览器图标可能需要刷新缓存或重新安装后更新。
 
-- **💰 低成本使用**： 可部署到 Cloudflare Workers 降低服务器成本
+## 开发与验证
 
-- **💻 响应式设计**：响应式布局自动适配PC和大部分手机端浏览器
+使用 Node.js 24 和 pnpm 11，与现有部署工作流保持一致：
 
-- **📧 邮件发送**：集成Resend发送邮件，支持群发，内嵌图片和附件发送，发送状态查看
-
-- **🛡️ 管理员功能**：可以对用户，邮件进行管理，RABC权限控制对功能及使用资源限制
-
-- **📦 附件收发**：支持收发附件，使用R2对象存储保存和下载文件
-
-- **🔔 邮件推送**：接收邮件后可以转发到TG机器人或其他服务商邮箱
-
-- **📡 开放API**：支持使用API批量生成用户，多条件查询邮件 
-
-- **🔢 验证码识别**：使用Workers AI，自动识别邮件验证码 
-
-- **📈 数据可视化**：使用ECharts对系统数据详情，用户邮件增长可视化显示
-
-- **🎨 个性化设置**：可以自定义网站标题，登录背景，透明度
-
-- **🤖 人机验证**：集成Turnstile人机验证，防止人机批量注册
-
-- **📜 更多功能**：正在开发中...
-
-
-
-## 技术栈
-
-- **平台**：[Cloudflare Workers](https://developers.cloudflare.com/workers/)
-
-- **Web框架**：[Hono](https://hono.dev/)
-
-- **ORM：**[Drizzle](https://orm.drizzle.team/)
-
-- **前端框架**：[Vue3](https://vuejs.org/) 
-
-- **UI框架**：[Element Plus](https://element-plus.org/) 
-
-- **邮件推送：** [Resend](https://resend.com/)
-
-- **缓存**：[Cloudflare KV](https://developers.cloudflare.com/kv/)
-
-- **数据库**：[Cloudflare D1](https://developers.cloudflare.com/d1/)
-
-- **文件存储**：[Cloudflare R2](https://developers.cloudflare.com/r2/)
-
-## 目录结构
-
-```
-cloud-mail
-├── mail-worker				    # worker后端项目
-│   ├── src                  
-│   │   ├── api	 			    # api接口层			
-│   │   ├── const  			    # 项目常量
-│   │   ├── dao                 # 数据访问层
-│   │   ├── email			    # 邮件处理接收
-│   │   ├── entity			    # 数据库实体
-│   │   ├── error			    # 自定义异常
-│   │   ├── hono			    # web框架配置、拦截器、全局异常等
-│   │   ├── i18n			    # 语言国际化
-│   │   ├── init			    # 数据库缓存初始化
-│   │   ├── model			    # 响应体数据封装
-│   │   ├── security			# 身份权限认证
-│   │   ├── service			    # 业务服务层
-│   │   ├── template			# 消息模板
-│   │   ├── utils			    # 工具类
-│   │   └── index.js			# 入口文件
-│   ├── pageckge.json			# 项目依赖
-│   └── wrangler.toml			# 项目配置
-│
-├── mail-vue				    # vue前端项目
-│   ├── src
-│   │   ├── axios 			    # axios配置
-│   │   ├── components			# 自定义组件
-│   │   ├── echarts			    # echarts组件导入
-│   │   ├── i18n			    # 语言国际化
-│   │   ├── init			    # 入站初始化
-│   │   ├── layout			    # 主体布局组件
-│   │   ├── perm			    # 权限认证
-│   │   ├── request			    # api接口
-│   │   ├── router			    # 路由配置
-│   │   ├── store			    # 全局状态管理
-│   │   ├── utils			    # 工具类
-│   │   ├── views			    # 页面组件
-│   │   ├── app.vue			    # 入口组件
-│   │   ├── main.js			    # 入口js
-│   │   └── style.css			# 全局css
-│   ├── package.json			# 项目依赖
-└── └── env.release				# 项目配置
+```sh
+pnpm --dir mail-vue install --frozen-lockfile
+node --test mail-vue/tests/branding.test.js
+pnpm --dir mail-vue run build
 ```
 
-## 赞助
+发布构建输出到 `mail-worker/dist`。本地开发可运行 `pnpm --dir mail-vue run dev`，并使用现有 Worker 开发配置。
 
-<a href="https://doc.skymail.ink/support.html" >
-<img width="170px" src="./doc/images/support.png" alt="">
-</a>
+注意：
 
-## 许可证
+- `mail-vue/.env.remote` 的远程 API 地址按要求保留。不要将 remote 模式当作生产构建，也不要用个人邮件或真实凭据测试上游远程环境。
+- 保留 `wrangler.toml` 中的 `name = "cloud-mail"`，以及其他 Wrangler 配置、数据库名、工作流资源名与 bindings，避免意外创建新资源。
+- OAuth 请求中的旧 User-Agent 属于内部协议标识，未修改。
+- `mail-worker` 的 `test` 脚本实际执行 Wrangler 部署，并非单元测试；不要把它当作安全的测试命令运行。
+- 合并到 `main` 可能触发现有自动部署工作流，须先确认部署配置。PR 本身不执行部署。
+- 不要提交访问令牌、OAuth client secret、邮件内容或生产凭据。
 
-本项目采用 [MIT](LICENSE) 许可证	
+## 来源与许可证
 
-
-## 交流
-
-[Telegram](https://t.me/cloud_mail_tg)
-
+本定制版本基于 Cloud Mail，原作者版权声明为 `Copyright (c) 2025 aslost`。根目录 [LICENSE](LICENSE) 保持原文不变；第三方依赖的许可证与 notices 同样保留。
 
 

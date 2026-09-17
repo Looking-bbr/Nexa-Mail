@@ -10,7 +10,10 @@
     <div v-else :style="background"></div>
     <div class="form-wrapper">
       <div class="container">
-        <span class="form-title">{{ settingStore.settings.title }}</span>
+        <span class="form-title">
+          <img class="brand-logo" src="/mail-pwa.png" alt="Nexa Mail" width="32" height="32">
+          {{ settingStore.settings.title }}
+        </span>
         <span class="form-desc" v-if="show === 'login'">{{ $t('loginTitle') }}</span>
         <span class="form-desc" v-else>{{ $t('regTitle') }}</span>
         <div v-show="show === 'login'">
@@ -144,9 +147,6 @@
         </el-button>
       </div>
     </el-dialog>
-    <a v-show="settingStore.settings.projectLink" class="github" href="https://github.com/maillab/cloud-mail">
-      <Icon icon="mingcute:github-line" color="#1890ff" width="20" height="20" />
-    </a>
   </div>
 </template>
 
@@ -684,8 +684,16 @@ function submitRegister() {
   }
 
   .form-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-weight: bold;
     font-size: 22px !important;
+  }
+
+  .brand-logo {
+    object-fit: contain;
+    flex-shrink: 0;
   }
 
   .switch {
@@ -741,23 +749,6 @@ function submitRegister() {
 .setting-icon {
   position: relative;
   top: 6px;
-}
-
-.github {
-  position: fixed;
-  width: 35px;
-  height: 35px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  background: var(--el-bg-color);
-  bottom: 10px;
-  right: 10px;
-  z-index: 1000;
-  border: 1px solid var(--el-border-color-light);
-  box-shadow: var(--el-box-shadow-light);
-  cursor: pointer;
 }
 
 :deep(.el-input-group__append) {
