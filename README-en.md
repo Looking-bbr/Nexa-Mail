@@ -1,148 +1,56 @@
+# Nexa Mail
+
 <p align="center">
-    <img src="doc/demo/logo.png" width="80px" />
-    <h1 align="center">Cloud Mail</h1>
-    <p align="center">A simple, responsive email service designed to run on Cloudflare Workers 🎉</p> 
-    <p align="center">
-       <a href="/README.md" style="margin-left: 5px">简体中文</a> | English 
-    </p>
-    <p align="center">
-        <a href="https://github.com/maillab/cloud-mail/tree/main?tab=MIT-1-ov-file" target="_blank" >
-            <img src="https://img.shields.io/badge/license-MIT-green" />
-        </a>    
-        <a href="https://github.com/maillab/cloud-mail/releases" target="_blank" >
-            <img src="https://img.shields.io/github/v/release/maillab/cloud-mail" alt="releases" />
-        </a>  
-        <a href="https://github.com/maillab/cloud-mail/issues" >
-            <img src="https://img.shields.io/github/issues/maillab/cloud-mail" alt="issues" />
-        </a>  
-        <a href="https://github.com/maillab/cloud-mail/stargazers" target="_blank">
-            <img src="https://img.shields.io/github/stars/maillab/cloud-mail" alt="stargazers" />
-        </a>  
-        <a href="https://github.com/maillab/cloud-mail/forks" target="_blank" >
-            <img src="https://img.shields.io/github/forks/maillab/cloud-mail" alt="forks" />
-        </a>
-    </p>
-    <p align="center">
-        <a href="https://trendshift.io/repositories/20459" target="_blank" >
-            <img src="https://trendshift.io/api/badge/repositories/20459" alt="trendshift" >
-        </a>
-    </p>
+  <img src="mail-vue/public/mail-pwa-512.png" width="80" height="80" alt="Nexa Mail">
 </p>
 
-## Description
-With only one domain, you can create multiple different email addresses, similar to major email platforms. This project can be deployed on Cloudflare Workers to reduce server costs and build your own email service.
-## Project Showcase
+[简体中文](README.md) | English
 
-- [Live Demo](https://skymail.ink)<br>
-- [Deployment Guide](https://doc.skymail.ink/en/)<br>
+Nexa Mail is a self-hosted email service customized from the MIT-licensed Cloud Mail project. It is a branding and downstream development effort, not an underlying implementation written from scratch. The original license and copyright notice are retained.
 
+This repository maintains deployment code. The intended public offering is the deployed mail service; this document does not change repository visibility, deploy resources, or delete anything.
 
-| ![](/doc/demo/demo1.png) | ![](/doc/demo/demo2.png) |
-|--------------------------|--------------------------|
-| ![](/doc/demo/demo3.png) | ![](/doc/demo/demo4.png) |
+## Components
 
-## Features
+- `mail-vue/`: Vue 3 / Element Plus frontend, login, administration and PWA.
+- `mail-worker/`: Cloudflare Workers backend using D1, KV and R2, with existing mail delivery, Resend, Telegram notifications and OAuth integrations.
+- `.github/workflows/deploy-cloudflare.yml`: the existing build and deployment workflow.
+- `LICENSE`: the preserved MIT license and upstream copyright notice.
 
-- **💰 Low-Cost Usage**: No server required — deploy to Cloudflare Workers to reduce costs.
+## Phase-one branding
 
-- **💻 Responsive Design**: Automatically adapts to both desktop and most mobile browsers.
+- Page title, description, and new-installation website / notice titles use Nexa Mail.
+- The favicon, PWA icons (192 / 512 pixels), loading screen, login and sidebar use the owner's blue N mail logo, resized without redesigning it.
+- Upstream promotion, donation and documentation links, and the upstream release-check request, are removed from the UI. GitHub OAuth and Telegram notification settings remain.
+- Mail business logic, API paths, database structure, Cloudflare bindings and OAuth flows are unchanged.
 
-- **📧 Email Sending**: Integrated with Resend, supporting bulk email sending and attachments.
+## Existing installations
 
-- **🛡️ Admin Features**: Admin controls for user and email management with RBAC-based access control.
+New databases receive the new default brand. Existing titles are not migrated or overwritten: when reading settings, the frontend displays `Nexa Mail` only for `title` and `noticeTitle` values exactly equal to the legacy default `Cloud Mail`. Custom titles, notice content and other settings are preserved, without writing back to D1 or KV on reads.
 
-- **📦 Attachment Support**: Send and receive attachments, stored and downloaded via R2 object storage.
+Review any manually customized titles, notice bodies or background images for old branding or links in system settings. User-provided content is not bulk-rewritten. Existing browser / installed PWA icons may require a cache refresh or reinstallation.
 
-- **🔔 Email Push**: Forward received emails to Telegram bots or other email providers.
+## Development and validation
 
-- **📡 Open API**: Supports batch user creation via API and multi-condition email queries
+Use Node.js 24 and pnpm 11, matching the existing deployment workflow:
 
-- **🔢 Verification Code Recognition**: Auto-detect codes via Workers AI
-
-- **📈 Data Visualization**: Use ECharts to visualize system data, including user email growth.
-
-- **🎨 Personalization**: Customize website title, login background, and transparency.
-
-- **🤖 CAPTCHA**: Integrated with Turnstile CAPTCHA to prevent automated registration.
-
-- **📜 More Features**: Under development...
-
-## Tech Stack
-
-- **Platform**: [Cloudflare Workers](https://developers.cloudflare.com/workers/)
-
-- **Web Framework**: [Hono](https://hono.dev/)
-
-- **ORM**: [Drizzle](https://orm.drizzle.team/)
-
-- **Frontend Framework**: [Vue3](https://vuejs.org/)
-
-- **UI Framework**: [Element Plus](https://element-plus.org/)
-
-- **Email Service**: [Resend](https://resend.com/)
-
-- **Cache**: [Cloudflare KV](https://developers.cloudflare.com/kv/)
-
-- **Database**: [Cloudflare D1](https://developers.cloudflare.com/d1/)
-
-- **File Storage**: [Cloudflare R2](https://developers.cloudflare.com/r2/)
-
-## Project Structure
-
-```
-cloud-mail
-├── mail-worker				    # Backend worker project
-│   ├── src                  
-│   │   ├── api	 			    # API layer
-│   │   ├── const  			    # Project constants
-│   │   ├── dao                 # Data access layer
-│   │   ├── email			    # Email processing and handling
-│   │   ├── entity			    # Database entities
-│   │   ├── error			    # Custom exceptions
-│   │   ├── hono			    # Web framework, middleware, error handling
-│   │   ├── i18n			    # Internationalization
-│   │   ├── init			    # Database and cache initialization
-│   │   ├── model			    # Response data models
-│   │   ├── security			# Authentication and authorization
-│   │   ├── service			    # Business logic layer
-│   │   ├── template			# Message templates
-│   │   ├── utils			    # Utility functions
-│   │   └── index.js			# Entry point
-│   ├── package.json			# Project dependencies
-│   └── wrangler.toml			# Project configuration
-│
-├─ mail-vue				        # Frontend Vue project
-│   ├── src
-│   │   ├── axios 			    # Axios configuration
-│   │   ├── components			# Custom components
-│   │   ├── echarts			    # ECharts integration
-│   │   ├── i18n			    # Internationalization
-│   │   ├── init			    # Startup initialization
-│   │   ├── layout			    # Main layout components
-│   │   ├── perm			    # Permissions and access control
-│   │   ├── request			    # API request layer
-│   │   ├── router			    # Router configuration
-│   │   ├── store			    # Global state management
-│   │   ├── utils			    # Utility functions
-│   │   ├── views			    # Page components
-│   │   ├── app.vue			    # Root component
-│   │   ├── main.js			    # Entry JS file
-│   │   └── style.css			# Global styles
-│   ├── package.json			# Project dependencies
-└── └── env.release				# Environment configuration
-
+```sh
+pnpm --dir mail-vue install --frozen-lockfile
+node --test mail-vue/tests/branding.test.js
+pnpm --dir mail-vue run build
 ```
 
-## Sponsor
+Release builds output to `mail-worker/dist`. Use `pnpm --dir mail-vue run dev` with the existing Worker development configuration for local development.
 
-<a href="https://doc.skymail.ink/support.html">
-<img width="170px" src="./doc/images/support.png" alt="">
-</a>
+Notes:
 
-## License
+- The remote API URL in `mail-vue/.env.remote` is intentionally unchanged. Do not use remote mode for production builds or send personal mail / real credentials to the upstream development endpoint.
+- Keep `name = "cloud-mail"` in `wrangler.toml`, other Wrangler resource names, database names, workflow resource identifiers and bindings to avoid creating replacement resources.
+- The legacy OAuth User-Agent is an internal protocol identifier and remains unchanged.
+- The `mail-worker` script named `test` actually deploys with Wrangler; it is not a unit-test command.
+- Merging into `main` may trigger the existing deployment workflow. Verify deployment configuration before merging; opening a PR does not deploy.
+- Never commit access tokens, OAuth client secrets, mail content or production credentials.
 
-This project is licensed under the [MIT](LICENSE) license.
+## Provenance and license
 
-## Communication
-
-[Telegram](https://t.me/cloud_mail_tg)
+This customization is based on Cloud Mail. The original copyright notice is `Copyright (c) 2025 aslost`. The root [LICENSE](LICENSE) is unchanged, and third-party licenses and notices are retained.

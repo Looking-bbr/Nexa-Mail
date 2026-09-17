@@ -2,7 +2,7 @@
   <el-scrollbar class="scroll">
     <div>
       <div class="title" >
-        <Icon icon="mdi:email-outline" width="24" height="24" />
+        <img class="brand-logo" src="/mail-pwa.png" alt="Nexa Mail" width="24" height="24">
         <div>{{settingStore.settings.title}}</div>
       </div>
       <el-menu :collapse="false" text-color="#fff" active-text-color="#fff" style="margin-top: 10px">
@@ -108,6 +108,11 @@ const route = useRoute();
   :deep(.el-icon) {
     flex-shrink: 0;
     font-size: 20px;
+  }
+
+  .brand-logo {
+    object-fit: contain;
+    flex-shrink: 0;
   }
 
   .user-right-icon {
